@@ -142,7 +142,7 @@ public class TagWriter {
 
     /**
      * Finds and replaces tokens within tag body.
-     * 
+     *
      * <p>
      * Options for token pattern:
      * <ul>
