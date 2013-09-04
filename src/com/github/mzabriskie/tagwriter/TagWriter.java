@@ -167,14 +167,20 @@ public class TagWriter {
      * @return Evaluated content body
      * @throws JspException
      */
-    private static String evaluate(PageContext pageContext, String body) throws JspException {
+    static String evaluate(PageContext pageContext, String body) throws JspException {
         Matcher matcher = TOKEN_PATTERN.matcher(body);
         StringBuffer result = new StringBuffer();
 
         // Find any tokens that need to be replaced
         while (matcher.find()) {
             String[] parts = matcher.group(2).split("\\.");
-            Object var = pageContext.findAttribute(parts[0]);
+            Object var = null;
+
+            try {
+                var = pageContext.findAttribute(parts[0]);
+            } catch (RuntimeException e) {
+                /* Ignore this exception, most likely NPE which will be handled by var initialized as null above */
+            }
 
             if (parts.length > 1) {
                 for (int i=1; i<parts.length; i++) {
